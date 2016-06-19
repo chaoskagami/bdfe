@@ -5,9 +5,9 @@ CFLAGS += -g
 LIBS    =
 
 CORE = bdfe
-OBJS = main.o bdf.o rterm.o
-HFILES = Makefile rterm.h
-CFILES = bdf.c rterm.c main.c
+OBJS = main.o bdf.o
+HFILES = Makefile
+CFILES = bdf.c main.c
 
 all: $(CORE)
 

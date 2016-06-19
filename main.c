@@ -35,7 +35,6 @@
 #include <unistd.h>
 
 #include "bdf.h"
-#include "rterm.h"
 
 #define DISPLAY_FONT 0x80000000
 
