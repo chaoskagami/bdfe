@@ -54,15 +54,16 @@ static int arg_is(const char *arg, const char *sarg, const char *larg)
 
 static void usage(const char *name)
 {
-	printf("%s [options] <bdf file>\n", name);
-	printf("  options are:\n");
-	printf("  header:     print file header\n");
-	printf("  verbose:    add extra info to the header\n");
-	printf("  line:       one line per glyph\n");
-	printf("  subset a-b: subset of glyphs to convert a to b, default 32-126\n");
-	printf("  all:        print all glyphs, not just 32-126\n");
-	printf("  native:     do not adjust font height 8 pixels\n");
-	printf("  ascender H: add extra ascender of H pixels per glyph\n");
+	printf("%s [options] bdf [> output]\n", name);
+	printf("  -h (--help)           display this help text\n");
+	printf("  -L (--header)         print file header\n");
+	printf("  -v (--verbose)        add more info to the header\n");
+	printf("  -a h (--ascend h)     add ascend gap of H pixels per glyph\n");
+	printf("  -l (--line)           output should be one line per glyph\n");
+	printf("  -S a-b (--subset a-b) subset of glyphs to convert a to b, default 32-126\n");
+	printf("  -A (--all-glyphs)     convert all glyphs, not just 32-126\n");
+	printf("  -n (--native)         do not adjust font height 8 pixels\n");
+	printf("  -r (--rotate)         rotate output font\n");
 }
 
 int main(int argc, char **argv)
@@ -74,31 +75,31 @@ int main(int argc, char **argv)
 	unsigned gmin = 32, gmax = 126;
 
 	if (argc < 2) {
-		usage(basename(argv[0]));
+		usage(argv[0]);
 		return -1;
 	}
 
 	for(int i = 1; i < argc; i++) {
-		if (arg_is(argv[i], "-?", "help")) {
-			usage(basename(argv[0]));
+		if (arg_is(argv[i], "-h", "--help")) {
+			usage(argv[0]);
 			return 0;
 		}
 
-		if (arg_is(argv[i], "-h", "header"))
+		if (arg_is(argv[i], "-L", "--header"))
 			flags |= BDF_HEADER;
 
-		if (arg_is(argv[i], "-v", "verbose"))
+		if (arg_is(argv[i], "-v", "--verbose"))
 			flags |= BDF_VERBOSE;
 
-		if (arg_is(argv[i], "-a", "ascender")) {
+		if (arg_is(argv[i], "-a", "--ascend")) {
 			if (i < argc && isdigit(*argv[i+1]))
 				ascender = atoi(argv[++i]);
 		}
 
-		if (arg_is(argv[i], "-l", "line"))
+		if (arg_is(argv[i], "-l", "--line"))
 			flags |= BDF_GPL;
 
-		if (arg_is(argv[i], "-s", "subset")) {
+		if (arg_is(argv[i], "-S", "--subset")) {
 			if (i < argc && isdigit(*argv[i+1])) {
 				i++;
 				char *end;
@@ -114,19 +115,16 @@ int main(int argc, char **argv)
 			}
 		}
 
-		if (arg_is(argv[i], "-a", "all")) {
+		if (arg_is(argv[i], "-A", "--all-glyphs")) {
 			gmin = 0;
 			gmax = 0xFFFFFFFF;
 		}
 
-		if (arg_is(argv[i], "-n", "native"))
+		if (arg_is(argv[i], "-n", "--native"))
 			flags |= BDF_NATIVE;
 
-		if (arg_is(argv[i], "-r", "rotate"))
+		if (arg_is(argv[i], "-r", "--rotate"))
 			flags |= BDF_ROTATE;
-
-		if (arg_is(argv[i], "-d", "display"))
-			flags |= DISPLAY_FONT;
 	}
 
 	file = argv[argc - 1];

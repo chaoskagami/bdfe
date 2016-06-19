@@ -99,7 +99,7 @@ bdfe_t *bdf_convert(const char *name, unsigned gmin, unsigned gmax, unsigned asc
 			printf(" -r");
 		if (ascender)
 			printf(" -a %d", ascender);
-		printf(" -s %d-%d %s'\n", gmin, gmax, basename(name));
+		printf(" -s %d-%d %s'\n", gmin, gmax, name);
 	}
 
 	// parse file header up to 'CHARS' keyword
