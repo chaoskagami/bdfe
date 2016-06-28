@@ -36,6 +36,15 @@
 
 #include "bdf.h"
 
+static int printable(unsigned character) {
+    // This is a workaround for older glibc - isprint doesn't
+    // return the needed results (and it's only standard behavior for 0-255 anyways)
+
+    if (character < 0x20 || character == 0x7f || character > 0xff)
+        return 0;
+    return 1;
+}
+
 // check if 'buf' starts with 'key' and store pointer to the argument
 static char *key_arg(char *buf, const char *key, char **arg)
 {
@@ -266,12 +275,12 @@ bdfe_t *bdf_convert(const char *name, unsigned gmin, unsigned gmax, unsigned asc
 								printf("0x%02X,", gout[i]);
 							}
 							printf(" /* %5d", idx);
-							if (isprint(idx))
+							if (printable(idx))
 								printf(" '%c'", idx);
 							printf(" */\n");
 						}
 						else {
-							printf("/* %5d '%c' |", idx, isprint(idx) ? idx : ' ');
+							printf("/* %5d '%c' |", idx, printable(idx) ? idx : ' ');
 							for(i = 0; i < gw; i++)
 								printf("%d", i);
 							printf("| */\n");
