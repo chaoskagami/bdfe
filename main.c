@@ -53,12 +53,9 @@ static int arg_is(const char *arg, const char *sarg, const char *larg)
 
 static void usage(const char *name)
 {
-	printf("%s [options] bdf [> output]\n", name);
+	printf("%s [options] bdf [> output.bin]\n", name);
 	printf("  -h (--help)           display this help text\n");
-	printf("  -L (--header)         print file header\n");
-	printf("  -v (--verbose)        add more info to the header\n");
 	printf("  -a h (--ascend h)     add ascend gap of H pixels per glyph\n");
-	printf("  -l (--line)           output should be one line per glyph\n");
 	printf("  -S a-b (--subset a-b) subset of glyphs to convert a to b, default 32-126\n");
 	printf("  -A (--all-glyphs)     convert all glyphs, not just 32-126\n");
 	printf("  -n (--native)         do not adjust font height 8 pixels\n");
@@ -84,19 +81,10 @@ int main(int argc, char **argv)
 			return 0;
 		}
 
-		if (arg_is(argv[i], "-L", "--header"))
-			flags |= BDF_HEADER;
-
-		if (arg_is(argv[i], "-v", "--verbose"))
-			flags |= BDF_VERBOSE;
-
 		if (arg_is(argv[i], "-a", "--ascend")) {
 			if (i < argc && isdigit(*argv[i+1]))
 				ascender = atoi(argv[++i]);
 		}
-
-		if (arg_is(argv[i], "-l", "--line"))
-			flags |= BDF_GPL;
 
 		if (arg_is(argv[i], "-S", "--subset")) {
 			if (i < argc && isdigit(*argv[i+1])) {
