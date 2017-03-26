@@ -1,4 +1,4 @@
-CXX = g++
+CXX = gcc
 CFLAGS = -Wall -Werror
 CFLAGS += -g
 #CFLAGS += -O3
